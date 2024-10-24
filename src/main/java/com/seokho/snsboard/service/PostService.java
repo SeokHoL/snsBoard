@@ -1,8 +1,12 @@
 package com.seokho.snsboard.service;
 
+import com.seokho.snsboard.exception.post.PostNotFoundException;
 import com.seokho.snsboard.model.Post;
 import com.seokho.snsboard.model.PostPatchRequestBody;
 import com.seokho.snsboard.model.PostPostRequestBody;
+import com.seokho.snsboard.model.entity.PostEntity;
+import com.seokho.snsboard.repository.PostEntityRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -15,54 +19,48 @@ import java.util.Optional;
 @Service
 public class PostService {
 
+    @Autowired private  PostEntityRepository postEntityRepository;
+
     private static final List<Post> posts = new ArrayList<>();
 
-    static {
-
-        posts.add(new Post(1L,"Post 1",ZonedDateTime.now()));
-        posts.add(new Post(2L,"Post 2", ZonedDateTime.now()));
-        posts.add(new Post(3L,"Post 3", ZonedDateTime.now()));
-    }
 
     public List<Post> getPosts() {
-        return posts;
+        var  postEntities = postEntityRepository.findAll();
+        return postEntities.stream().map(Post::from).toList();
     }
 
-    public Optional<Post> getPostByPostId(Long postId){
-        return posts.stream().filter(post -> postId.equals(post.getPostId())).findFirst();
+    public Post getPostByPostId(Long postId){
+        var postEntity = postEntityRepository.findById(postId)
+                .orElseThrow(()->new PostNotFoundException(postId));
+
+        return Post.from(postEntity);
     }
 
     public Post createPost(PostPostRequestBody postPostRequestBody) {
-       var newPostId = posts.stream().mapToLong(Post::getPostId).max().orElse(0L) + 1;
-
-       var newPost = new Post(newPostId, postPostRequestBody.body(), ZonedDateTime.now());
-       posts.add(newPost);
-
-       return newPost;
+        var postEntity= new PostEntity();
+        postEntity.setBody(postPostRequestBody.body());
+        postEntityRepository.save(postEntity);
+        var savedPostEntity = postEntityRepository.save(postEntity);
+        return Post.from(savedPostEntity);
 
     }
 
     public Post updatePost(Long postId, PostPatchRequestBody postPatchRequestBody) {
-        Optional<Post> postOptional =
-                posts.stream().filter(post -> postId.equals(post.getPostId())).findFirst();
 
-        if (postOptional.isPresent()){
-            Post postToUpdate = postOptional.get();
-            postToUpdate.setBody(postPatchRequestBody.body());
-            return postToUpdate;
-        }else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
-        }
+        var postEntity = postEntityRepository.findById(postId)
+                .orElseThrow(()->new PostNotFoundException(postId));
+        postEntity.setBody(postPatchRequestBody.body());
+        var updatedPostEntity =  postEntityRepository.save(postEntity);
+        return Post.from(updatedPostEntity);
+
     }
 
     public void deletePost(Long postId) {
-        Optional<Post> postOptional =
-                posts.stream().filter(post -> postId.equals(post.getPostId())).findFirst();
 
-        if (postOptional.isPresent()){
-           posts.remove(postOptional.get());
-        }else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found");
-        }
+        var postEntity = postEntityRepository.findById(postId)
+                .orElseThrow(()->new PostNotFoundException(postId));
+
+        postEntityRepository.delete(postEntity);
+
     }
 }
