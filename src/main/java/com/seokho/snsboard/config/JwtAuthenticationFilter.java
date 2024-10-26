@@ -29,32 +29,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        //TODO: JWT 검증
         String BEARER_PREFIX = "Bearer ";
         var authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
         var securityContext = SecurityContextHolder.getContext();
 
-        //내가 따로 jwt 메세지를 보내고 싶다면. 이렇게 만든다.
-//        if (ObjectUtils.isEmpty(authorization) || !authorization.startsWith(BEARER_PREFIX)){
-//            throw new JwtTokenNotFoundException();
-//        }
+        if (!ObjectUtils.isEmpty(authorization)
+                && authorization.startsWith(BEARER_PREFIX)
+                && securityContext.getAuthentication() == null) {
+            var jwtToken = authorization.substring(BEARER_PREFIX.length());
+            var username = jwtService.getUsername(jwtToken);
+            var userDetails = userService.loadUserByUsername(username);
 
-        if(!ObjectUtils.isEmpty(authorization) && authorization.startsWith(BEARER_PREFIX)
-        && securityContext.getAuthentication()==null){
-
-            var accessToken = authorization.substring(BEARER_PREFIX.length());
-            var username = jwtService.getUsername(accessToken);
-            var userDetails =  userService.loadUserByUsername(username);
-
-            var authenticationToken =new UsernamePasswordAuthenticationToken(
-                    userDetails, null, userDetails.getAuthorities());
-            authenticationToken.setDetails(
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            usernamePasswordAuthenticationToken.setDetails(
                     new WebAuthenticationDetailsSource().buildDetails(request));
-            securityContext.setAuthentication(authenticationToken);
+            securityContext.setAuthentication(usernamePasswordAuthenticationToken);
             SecurityContextHolder.setContext(securityContext);
         }
 
         filterChain.doFilter(request, response);
-
     }
 }

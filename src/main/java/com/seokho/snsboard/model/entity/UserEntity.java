@@ -15,7 +15,8 @@ import java.util.Random;
 import static org.hibernate.grammars.hql.HqlParser.CURRENT_TIMESTAMP;
 
 @Entity
-@Table(name = "\"user\"")
+@Table(name = "\"user\"",
+indexes = {@Index(name = "user_username_idx", columnList = "username", unique = true)})
 @SQLDelete(sql = "UPDATE\"user\" SET deleteddatetime=CURRENT_TIMESTAMP WHERE userid =?")
 @SQLRestriction("deleteddatetime IS NULL")
 public class UserEntity implements UserDetails {
@@ -24,10 +25,10 @@ public class UserEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column
+    @Column(nullable = false)
     private String username;
 
-    @Column
+    @Column(nullable = false)
     private String password;
 
     @Column private String profile;
@@ -151,8 +152,8 @@ public class UserEntity implements UserDetails {
 
         //Avatar Placeholder 서비스(https://avatar-placeholder.iran.liara.run)기반
         //랜덤한 프로필 사진 설정 (1~100)
-        userEntity.setProfile("https://avatar-placeholder.iran.liara.run/public/" + new Random().nextInt(100) + "png");
-
+//        userEntity.setProfile("https://avatar-placeholder.iran.liara.run/public/" + (new Random().nextInt(100) + 1));
+        userEntity.setProfile("https://dev-jayce.github.io/public/profile/" + (new Random().nextInt(100) + 1)+".png");
        return userEntity;
     }
 
