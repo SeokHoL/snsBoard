@@ -3,15 +3,18 @@ package com.seokho.snsboard.service;
 import com.seokho.snsboard.exception.post.PostNotFoundException;
 import com.seokho.snsboard.exception.user.UserNotAllowedException;
 import com.seokho.snsboard.exception.user.UserNotFoundException;
+import com.seokho.snsboard.model.entity.LikeEntity;
 import com.seokho.snsboard.model.entity.UserEntity;
 import com.seokho.snsboard.model.post.Post;
 import com.seokho.snsboard.model.post.PostPatchRequestBody;
 import com.seokho.snsboard.model.post.PostPostRequestBody;
 import com.seokho.snsboard.model.entity.PostEntity;
+import com.seokho.snsboard.repository.LikeEntityRepository;
 import com.seokho.snsboard.repository.PostEntityRepository;
 import com.seokho.snsboard.repository.UserEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,7 @@ public class PostService {
 
     @Autowired private  PostEntityRepository postEntityRepository;
     @Autowired private UserEntityRepository userEntityRepository;
+    @Autowired private LikeEntityRepository likeEntityRepository;
 
     private static final List<Post> posts = new ArrayList<>();
 
@@ -81,5 +85,24 @@ public class PostService {
 
         var postEntities = postEntityRepository.findByUser(userEntity);
         return postEntities.stream().map(Post::from).toList();
+    }
+
+    @Transactional
+    public Post toggleLike(Long postId, UserEntity currentUser) {
+
+        var postEntity = postEntityRepository.findById(postId)
+                .orElseThrow(()->new PostNotFoundException(postId));
+
+        var likeEntity = likeEntityRepository.findByUserAndPost(currentUser, postEntity);
+
+        if (likeEntity.isPresent()) {
+            likeEntityRepository.delete(likeEntity.get());
+            postEntity.setLikesCount(Math.max(0,postEntity.getLikesCount() - 1));
+        }else {
+            likeEntityRepository.save(LikeEntity.of(currentUser, postEntity));
+            postEntity.setLikesCount(postEntity.getLikesCount() + 1);
+        }
+
+        return  Post.from(postEntityRepository.save(postEntity));
     }
 }
