@@ -4,7 +4,7 @@ import com.seokho.snsboard.model.entity.UserEntity;
 
 import java.time.ZonedDateTime;
 
-public record User(Long userId, String username, String profile, String description,
+public record User(Long userId, String username, String profile, String description, Long followersCount, Long followingCount,
                    ZonedDateTime createdDateTime, ZonedDateTime updatedDateTime) {
 
     public static User from(UserEntity userEntity){
@@ -13,6 +13,8 @@ public record User(Long userId, String username, String profile, String descript
                 userEntity.getUsername(),
                 userEntity.getProfile(),
                 userEntity.getDescription(),
+                userEntity.getFollowesrCount(),
+                userEntity.getFollowingsCount(),
                 userEntity.getCreatedDateTime(),
                 userEntity.getUpdatedDateTime());
     }

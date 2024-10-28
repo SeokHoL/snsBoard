@@ -35,6 +35,10 @@ public class UserEntity implements UserDetails {
 
     @Column private String description;
 
+    @Column private Long followesrCount = 0L;
+
+    @Column private Long followingsCount = 0L;
+
     @Column private ZonedDateTime createdDateTime;
 
     @Column private ZonedDateTime updatedDateTime;
@@ -49,28 +53,12 @@ public class UserEntity implements UserDetails {
         this.userId = userId;
     }
 
-    public ZonedDateTime getDeletedDatetime() {
-        return deletedDatetime;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public void setDeletedDatetime(ZonedDateTime deletedDatetime) {
-        this.deletedDatetime = deletedDatetime;
-    }
-
-    public ZonedDateTime getCreatedDateTime() {
-        return createdDateTime;
-    }
-
-    public void setCreatedDateTime(ZonedDateTime createdDateTime) {
-        this.createdDateTime = createdDateTime;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getProfile() {
@@ -81,12 +69,36 @@ public class UserEntity implements UserDetails {
         this.profile = profile;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public String getDescription() {
+        return description;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Long getFollowesrCount() {
+        return followesrCount;
+    }
+
+    public void setFollowesrCount(Long followesrCount) {
+        this.followesrCount = followesrCount;
+    }
+
+    public Long getFollowingsCount() {
+        return followingsCount;
+    }
+
+    public void setFollowingsCount(Long followingsCount) {
+        this.followingsCount = followingsCount;
+    }
+
+    public ZonedDateTime getCreatedDateTime() {
+        return createdDateTime;
+    }
+
+    public void setCreatedDateTime(ZonedDateTime createdDateTime) {
+        this.createdDateTime = createdDateTime;
     }
 
     public ZonedDateTime getUpdatedDateTime() {
@@ -97,17 +109,25 @@ public class UserEntity implements UserDetails {
         this.updatedDateTime = updatedDateTime;
     }
 
+    public ZonedDateTime getDeletedDatetime() {
+        return deletedDatetime;
+    }
+
+    public void setDeletedDatetime(ZonedDateTime deletedDatetime) {
+        this.deletedDatetime = deletedDatetime;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserEntity that = (UserEntity) o;
-        return Objects.equals(userId, that.userId) && Objects.equals(username, that.username) && Objects.equals(password, that.password) && Objects.equals(profile, that.profile) && Objects.equals(description, that.description) && Objects.equals(createdDateTime, that.createdDateTime) && Objects.equals(updatedDateTime, that.updatedDateTime) && Objects.equals(deletedDatetime, that.deletedDatetime);
+        return Objects.equals(userId, that.userId) && Objects.equals(username, that.username) && Objects.equals(password, that.password) && Objects.equals(profile, that.profile) && Objects.equals(description, that.description) && Objects.equals(followesrCount, that.followesrCount) && Objects.equals(followingsCount, that.followingsCount) && Objects.equals(createdDateTime, that.createdDateTime) && Objects.equals(updatedDateTime, that.updatedDateTime) && Objects.equals(deletedDatetime, that.deletedDatetime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, username, password, profile, description, createdDateTime, updatedDateTime, deletedDatetime);
+        return Objects.hash(userId, username, password, profile, description, followesrCount, followingsCount, createdDateTime, updatedDateTime, deletedDatetime);
     }
 
     @Override
