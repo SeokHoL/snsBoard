@@ -3,6 +3,7 @@ package com.seokho.snsboard.service;
 import com.seokho.snsboard.exception.post.PostNotFoundException;
 import com.seokho.snsboard.exception.reply.ReplyNotFoundException;
 import com.seokho.snsboard.exception.user.UserNotAllowedException;
+import com.seokho.snsboard.exception.user.UserNotFoundException;
 import com.seokho.snsboard.model.entity.ReplyEntity;
 import com.seokho.snsboard.model.entity.UserEntity;
 import com.seokho.snsboard.model.post.*;
@@ -90,5 +91,12 @@ public class ReplyService {
     }
 
 
+    public List<Reply> getRepliesByUser(String username) {
+        var userEntity = userEntityRepository.findByUsername(username)
+                .orElseThrow(()-> new UserNotFoundException(username));
 
+        var replyEntities = replyEntityRepository.findByUser(userEntity);
+        return replyEntities.stream().map(Reply::from).toList();
+
+    }
 }

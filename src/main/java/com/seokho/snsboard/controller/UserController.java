@@ -2,8 +2,10 @@ package com.seokho.snsboard.controller;
 
 import com.seokho.snsboard.model.entity.UserEntity;
 import com.seokho.snsboard.model.post.Post;
+import com.seokho.snsboard.model.reply.Reply;
 import com.seokho.snsboard.model.user.*;
 import com.seokho.snsboard.service.PostService;
+import com.seokho.snsboard.service.ReplyService;
 import com.seokho.snsboard.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +24,19 @@ public class UserController {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    ReplyService replyService;
+
     @GetMapping
-    public ResponseEntity<List<User>> getUsers(@RequestParam(required = false) String query) {
-        var users = userService.getUsers(query);
+    public ResponseEntity<List<User>> getUsers(@RequestParam(required = false) String query, Authentication authentication) {
+        var users = userService.getUsers(query, (UserEntity) authentication.getPrincipal());
         return ResponseEntity.ok(users);
 
     }
 
     @GetMapping("/{username}")
-    public ResponseEntity<User> getUser(@PathVariable String username) {
-        var user = userService.getUser(username);
+    public ResponseEntity<User> getUser(@PathVariable String username, Authentication authentication) {
+        var user = userService.getUser(username,(UserEntity) authentication.getPrincipal());
         return ResponseEntity.ok(user);
 
     }
@@ -46,8 +51,8 @@ public class UserController {
     }
     //GET /users/{username}/posts
     @GetMapping("/{username}/posts")
-    public ResponseEntity<List<Post>> getPostsByUsername(@PathVariable String username) {
-        var posts= postService.getPostsByUsername(username);
+    public ResponseEntity<List<Post>> getPostsByUsername(@PathVariable String username, Authentication authentication) {
+        var posts= postService.getPostsByUsername(username, (UserEntity) authentication.getPrincipal());
         return ResponseEntity.ok(posts);
     }
 
@@ -57,10 +62,34 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @DeleteMapping("/{username}/follows/{followerId}")
+    @DeleteMapping("/{username}/follows")
     public ResponseEntity<User> unfollow(@PathVariable String username, Authentication authentication) {
         var user =  userService.unFollow(username,(UserEntity) authentication.getPrincipal());
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/{username}/followers")
+    public ResponseEntity<List<Follower>> getFollowersByUser(@PathVariable String username,Authentication authentication) {
+        var followers =  userService.getFollowersByUsername(username,(UserEntity) authentication.getPrincipal());
+        return ResponseEntity.ok(followers);
+    }
+
+    @GetMapping("/{username}/followings")
+    public ResponseEntity<List<User>> getFollowingsByUser(@PathVariable String username, Authentication authentication) {
+        var followings =  userService.getFollowingsByUsername(username,(UserEntity) authentication.getPrincipal());
+        return ResponseEntity.ok(followings);
+    }
+
+    @GetMapping("/{username}/replies")
+    public ResponseEntity<List<Reply>> getRepliesByUser(@PathVariable String username) {
+        var replies = replyService.getRepliesByUser(username);
+        return ResponseEntity.ok(replies);
+    }
+
+    @GetMapping("/{username}/liked-users")
+    public ResponseEntity<List<LikedUser>> getLikedUsersByUser(@PathVariable String username, Authentication authentication) {
+        var likedUsers =  userService.getLikedUsersByUser(username,(UserEntity) authentication.getPrincipal());
+        return ResponseEntity.ok(likedUsers);
     }
 
     @PostMapping
