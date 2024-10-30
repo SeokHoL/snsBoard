@@ -23,6 +23,10 @@
 
 ## 🛠 사용기술 및 도구
 
+### Frontend
+도커허브에서 제공하는 이미지 사용
+
+### Backend
 ![Spring Boot](https://img.shields.io/badge/-Spring_Boot-6DB33F?logo=springboot&logoColor=white&style=flat)
 ![Spring Security](https://img.shields.io/badge/-Spring_Security-6DB33F?logo=springsecurity&logoColor=white&style=flat)
 ![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-4169E1?logo=postgresql&logoColor=white&style=flat)
