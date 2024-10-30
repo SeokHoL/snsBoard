@@ -41,35 +41,21 @@
 
 ## 🖼 기능 구현
 
-### 1. 라이트/다크 모드
+### 1. 로그인/회원가입
 <img src="https://github.com/user-attachments/assets/b63d1021-8018-49a2-8c81-8ac5bfde33ec" width="70%" alt="Board Demo">
 
-- 라이트 및 다크모드 기능 구현
-- 사용자의 시스템 모드에 맞게 theme이 설정되도록 구현
-- 사용자가 설정한 테마가 localStorage에 저장되어 한 번 설정한 이후 같은 theme을 보여주도록 구현
+- 로그인/회원가입 기능 구현함.
+- 회원가입 안되면 로그인이 안되게 구현함.
+  
 
-### 2. Hash Link
-- 페이지 내 섹션 이동 기능 구현
+### 2. 게시물/댓글/좋아요/팔로우 
+<img src="https://github.com/user-attachments/assets/b9641119-76b4-4022-8dff-e1866d2b03ca" width="70%" alt="Board Demo">
 
-### 3. 반응형 웹
-- 모바일, 태블릿, 데스크톱 등 다양한 디바이스 지원
+- 게시물을 작성하고 본인 및 다른사용자가 좋아요 및 답글을 만들수 있도록 함.
+- 본인에게 온 팔로우 요청 및 좋아요 를 확인할수 있도록 함.
+- 팔로워 및 팔로잉 요청을 수락하거나 취소할경우 변경이 보이도록 함.
+- 본인계정에서 프로필 편집, 작성한 게시물 및 답글을 한번에 볼 수 있고, 수정하거나 삭제 할 수 있도록 함.
 
-### 4. Email 전송
-- Contact 페이지 이메일 전송 기능 구현
 
-### 5. Open graph
-- 소셜 미디어 공유를 위한 메타 태그 설정
 
-## 주요 기능
-- 라이트/다크 모드
-- 반응형 웹
-- Hash Link
-- Email 전송
-- 배포 및 커스텀 도메인 연결
-- Open graph
-
-## 사용 기술
-- React
-- Styled-components
-- Firebase Hosting
 
