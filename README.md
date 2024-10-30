@@ -21,7 +21,7 @@
 > - 주요 기능: 로그인, 회원가입, 게시물, 댓글, 좋아요, 팔로우 기능 개발.
 
 
-## 🛠 기술 및 도구
+## 🛠 사용기술 및 도구
 
 ![Spring Boot](https://img.shields.io/badge/-Spring_Boot-6DB33F?logo=springboot&logoColor=white&style=flat)
 ![Spring Security](https://img.shields.io/badge/-Spring_Security-6DB33F?logo=springsecurity&logoColor=white&style=flat)
