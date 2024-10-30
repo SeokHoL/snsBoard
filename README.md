@@ -42,6 +42,8 @@
 ## 🖼 기능 구현
 
 ### 1. 라이트/다크 모드
+<img src="https://github.com/user-attachments/assets/b63d1021-8018-49a2-8c81-8ac5bfde33ec" width="70%" alt="Board Demo">
+
 - 라이트 및 다크모드 기능 구현
 - 사용자의 시스템 모드에 맞게 theme이 설정되도록 구현
 - 사용자가 설정한 테마가 localStorage에 저장되어 한 번 설정한 이후 같은 theme을 보여주도록 구현
