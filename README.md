@@ -24,7 +24,7 @@
 ## 🛠 사용기술 및 도구
 
 ### Frontend
-도커허브에서 제공하는 이미지 사용
+DockerHub에서 제공하는 images 사용
 
 ### Backend
 ![Spring Boot](https://img.shields.io/badge/-Spring_Boot-6DB33F?logo=springboot&logoColor=white&style=flat)
